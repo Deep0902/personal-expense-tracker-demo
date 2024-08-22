@@ -46,6 +46,15 @@ export let dummyUsers: Users[] = [
     wallet: 0,
     is_user_blocked: false,
   },
+  {
+    user_id: 4,
+    user_name: "Tom",
+    user_email: "zxc@email.com",
+    user_pass: "zxc",
+    profile_img: 2,
+    wallet: 0,
+    is_user_blocked: false,
+  },
 ];
 
 export let dummyExpenses: Expense[] = [

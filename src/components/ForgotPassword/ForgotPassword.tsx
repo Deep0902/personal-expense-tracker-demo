@@ -2,15 +2,16 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import TopNavbarSignedOut from "../TopNavbarSignedOut/TopNavbarSignedOut";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import "./ForgotPassword.css";
 import { Users } from "../../interfaces/Users";
 import PopupWarning from "../PopupWarning/PopupWarning";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import ScrollTop from "../ScrollTop/ScrollTop";
 
+// Import the dummyUsers array
+import { dummyUsers } from "../dummyDatas";
+
 function ForgotPassword() {
-  const token = "my_secure_token"; // Token for authorization
   const navigate = useNavigate();
   const [phases, setPhases] = useState(1);
   const [email, setEmail] = useState("");
@@ -21,6 +22,7 @@ function ForgotPassword() {
   const [countdown, setCountdown] = useState(0);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const resetFields = () => {
     setOtp("");
     setEmail("");
@@ -29,30 +31,14 @@ function ForgotPassword() {
     setConfirmPassword("");
   };
 
-  // Load user data when component mounts
+  // Load user data from dummyUsers when the component mounts
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:5000/api/users", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUsersDetails(response.data); // The response should match the Users interface structure
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchUsers();
+    setUsersDetails(dummyUsers);
   }, []);
 
   const nextState = () => {
     setPhases((prev) => prev + 1);
   };
-
-  //   const prevState = () => {
-  //     setPhases((prev) => prev - 1);
-  //   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -119,31 +105,34 @@ function ForgotPassword() {
     }
   };
 
-  const handleUpdatePassword = async () => {
+  const handleUpdatePassword = () => {
     if (password !== confirmPassword) {
       setIsAlertSuccess(false);
       setAlertMessage("Passwords do not match!");
       toggleAlertPopup();
       return;
     }
-    try {
-      await axios.put(
-        `http://127.0.0.1:5000/api/users/${userId}`,
-        { user_pass: password, user_email: email },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+
+    const userIndex = usersDetails.findIndex((user) => user.user_id === userId);
+    if (userIndex !== -1) {
+      // Update the password for the user in usersDetails
+      const updatedUsers = [...usersDetails];
+      updatedUsers[userIndex] = {
+        ...updatedUsers[userIndex],
+        user_pass: password,
+      };
+      setUsersDetails(updatedUsers);
+
+      // Update the dummyUsers array to reflect the changes
+      dummyUsers.splice(0, dummyUsers.length, ...updatedUsers);
+
       setAlertMessage("Password Updated successfully!");
       toggleAlertPopup();
       toggleLoading();
       setTimeout(() => {
         navigate("/personal-expense-tracker-demo/SignIn");
       }, 5000);
-    } catch (err) {
-      console.log(err);
+    } else {
       setIsAlertSuccess(false);
       setAlertMessage("Failed to update password.");
       toggleAlertPopup();
@@ -151,31 +140,37 @@ function ForgotPassword() {
       resetFields();
     }
   };
+
   const [showPassword, setShowPassword] = useState(false);
   const handleOldPasswordView = () => {
     setShowPassword(!showPassword);
   };
+
   const [showNewPassword, setShowNewPassword] = useState(false);
   const handleNewPasswordView = () => {
     setShowNewPassword(!showNewPassword);
   };
 
-  //Logic for Alert
+  // Logic for Alert
   const [isPopVisible, setIsPopVisible] = useState(false);
   const toggleAlertPopup = () => {
     setIsPopVisible(!isPopVisible);
   };
+
   const [alertMessage, setAlertMessage] = useState("");
   const [isAlertSuccess, setIsAlertSuccess] = useState(false);
-  //Logic for Loading screen
+
+  // Logic for Loading screen
   const [isLoadingVisible, setIsLoadingVisible] = useState(false);
   const toggleLoading = () => {
     setIsLoadingVisible(!isLoadingVisible);
   };
+
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
   return (
     <>
       <ScrollTop />
@@ -193,8 +188,6 @@ function ForgotPassword() {
               successAlert={isAlertSuccess}
             />
           )}
-          {/* <button onClick={prevState}>Previous</button>&nbsp;{phases}&nbsp;
-          <button onClick={nextState}>Next</button> */}
           <div className="credentialsCard2">
             <label className="poppins-bold">Forgot Password</label>
             {phases === 1 && (
@@ -334,4 +327,5 @@ function ForgotPassword() {
     </>
   );
 }
+
 export default ForgotPassword;

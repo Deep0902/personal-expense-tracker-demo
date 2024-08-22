@@ -2,12 +2,13 @@ import Footer from "../Footer/Footer";
 import TopNavbarSignedOut from "../TopNavbarSignedOut/TopNavbarSignedOut";
 import "./SignUp.css";
 import "../SignIn/SignIn.css";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PopupWarning from "../PopupWarning/PopupWarning";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import ScrollTop from "../ScrollTop/ScrollTop";
+// Import the dummyUsers array
+import { dummyUsers } from "../dummyDatas";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -37,7 +38,6 @@ function SignUp() {
     });
   };
 
-  const token = "my_secure_token";
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -54,56 +54,52 @@ function SignUp() {
       return;
     }
 
-    axios
-      .post("http://127.0.0.1:5000/api/users", userDetails, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log("User added successfully:", res.data);
-        setAlertMessage("User added successfully");
-        setIsAlertSuccess(true);
-        toggleAlertPopup();
-        toggleLoading();
-        setTimeout(() => {
-          navigate("/personal-expense-tracker-demo/SignIn");
-        }, 3000);
-      })
-      .catch((err) => {
-        console.error("Error adding user:", err);
-        if (err.response && err.response.data && err.response.data.message) {
-          setIsAlertSuccess(false);
-          setAlertMessage(err.response.data.message);
-          toggleAlertPopup();
-          setUserDetails({
-            user_pass: "",
-            confirm_pass: "",
-            user_email: "",
-            user_name: "",
-          });
-        } else {
-          setIsAlertSuccess(false);
-          setAlertMessage("An error occurred while adding the user");
-          toggleAlertPopup();
-          setUserDetails({
-            user_pass: "",
-            confirm_pass: "",
-            user_email: "",
-            user_name: "",
-          });
-        }
+    // Check if the email already exists in the dummy data
+    const existingUser = dummyUsers.find(
+      (user) => user.user_email === userDetails.user_email
+    );
+
+    if (existingUser) {
+      setIsAlertSuccess(false);
+      setAlertMessage("Email already exists!");
+      toggleAlertPopup();
+      setUserDetails({
+        user_pass: "",
+        confirm_pass: "",
+        user_email: "",
+        user_name: "",
       });
+      return;
+    }
+
+    // Simulate adding the user to the dummy data
+    dummyUsers.push({
+      user_id: dummyUsers.length + 1,
+      user_name: userDetails.user_name,
+      user_email: userDetails.user_email,
+      user_pass: userDetails.user_pass,
+      profile_img: 1, // Default profile image
+      wallet: 0,
+      is_user_blocked: false,
+    });
+
+    setAlertMessage("User added successfully");
+    setIsAlertSuccess(true);
+    toggleAlertPopup();
+    toggleLoading();
+    setTimeout(() => {
+      navigate("/personal-expense-tracker-demo/SignIn");
+    }, 3000);
   };
 
-  //Logic for Alert
+  // Logic for Alert
   const [isAlertSuccess, setIsAlertSuccess] = useState(false);
   const [isPopVisible, setIsPopVisible] = useState(false);
   const toggleAlertPopup = () => {
     setIsPopVisible(!isPopVisible);
   };
   const [alertMessage, setAlertMessage] = useState("");
-  //Logic for Loading screen
+  // Logic for Loading screen
   const [isLoadingVisible, setIsLoadingVisible] = useState(false);
   const toggleLoading = () => {
     setIsLoadingVisible(!isLoadingVisible);

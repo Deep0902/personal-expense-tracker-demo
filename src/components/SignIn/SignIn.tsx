@@ -5,9 +5,10 @@ import moreIcon from "/images/more.svg";
 import Footer from "../Footer/Footer";
 import { useState, useEffect } from "react";
 import "../TopNavbarSignedOut/TopNavbarSignedOut.css";
-import axios from "axios";
 import PopupWarning from "../PopupWarning/PopupWarning";
 import ScrollTop from "../ScrollTop/ScrollTop";
+// Import the dummyUsers array
+import { dummyUsers } from "../dummyDatas";
 
 function SignIn() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -34,8 +35,6 @@ function SignIn() {
     user_pass: "",
   });
 
-  const token = "my_secure_token";
-
   useEffect(() => {
     const storedEmail = localStorage.getItem("user_email");
     const storedPass = localStorage.getItem("user_pass");
@@ -51,63 +50,56 @@ function SignIn() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const res = await axios.post(
-        "http://127.0.0.1:5000/api/user",
-        {
-          user_email: credentials.user_email,
+    // Check the credentials against dummyUsers
+    const isUserValid = dummyUsers.find(
+      (user) =>
+        user.user_email === credentials.user_email &&
+        user.user_pass === credentials.user_pass
+    );
+
+    if (isUserValid) {
+      // If the user is valid, handle the session or local storage based on checkbox
+      if (isChecked) {
+        localStorage.setItem("user_email", credentials.user_email);
+        localStorage.setItem("user_pass", credentials.user_pass);
+      } else {
+        sessionStorage.setItem("user_email", credentials.user_email);
+        sessionStorage.setItem("user_pass", credentials.user_pass);
+        localStorage.removeItem("user_email");
+        localStorage.removeItem("user_pass");
+      }
+      // Navigate to the User Dashboard
+      navigate("/personal-expense-tracker-demo/UserDashboard", {
+        state: {
+          user_email: isUserValid.user_email,
           user_pass: credentials.user_pass,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const isUserValid = res.data.valid;
-
-      if (isUserValid) {
-        if (isChecked) {
-          localStorage.setItem("user_email", credentials.user_email);
-          localStorage.setItem("user_pass", credentials.user_pass);
-        } else {
-          sessionStorage.setItem("user_email", credentials.user_email);
-          sessionStorage.setItem("user_pass", credentials.user_pass);
-          localStorage.removeItem("user_email");
-          localStorage.removeItem("user_pass");
-        }
-        navigate("/personal-expense-tracker-demo/UserDashboard", {
-          state: {
-            user_email: isUserValid.user_email,
-            user_pass: credentials.user_pass,
-          },
-        });
-      } else {
-        setIsAlertSuccess(false);
-        setAlertMessage("Invalid credentials");
-        toggleAlertPopup();
-      }
-    } catch (err) {
+      });
+    } else {
+      // If the credentials are invalid, show an error message
       setIsAlertSuccess(false);
       setAlertMessage("Invalid credentials");
       toggleAlertPopup();
     }
   };
-  //Logic for Alert
+
+  // Logic for Alert
   const [isPopVisible, setIsPopVisible] = useState(false);
   const [isAlertSuccess, setIsAlertSuccess] = useState(false);
   const toggleAlertPopup = () => {
     setIsPopVisible(!isPopVisible);
   };
   const [alertMessage, setAlertMessage] = useState("");
+
   const [toggleScrollTop, setToggleScrollTop] = useState(false);
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [toggleScrollTop]);
+
   return (
     <>
       <ScrollTop />
@@ -237,7 +229,9 @@ function SignIn() {
             </p>
             <p
               className="underlineText poppins-semibold"
-              onClick={() => navigate("/personal-expense-tracker-demo/ForgotPassword")}
+              onClick={() =>
+                navigate("/personal-expense-tracker-demo/ForgotPassword")
+              }
             >
               Forgot Password
             </p>
