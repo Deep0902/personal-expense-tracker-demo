@@ -107,9 +107,16 @@ function AdminDashboard() {
   };
 
   const handleDelete = (userId: number) => {
-    // Simulate deletion from dummy data
-    setUsers(users.filter((user) => user.user_id !== userId));
-    setFilteredUsers(filteredUsers.filter((user) => user.user_id !== userId));
+    // Update the static dummyUsers array
+    const updatedUsers = dummyUsers.filter((user) => user.user_id !== userId);
+
+    // Update the state with the new user list
+    setUsers(updatedUsers);
+    setFilteredUsers(updatedUsers);
+
+    // Update the dummyUsers array directly
+    dummyUsers.splice(0, dummyUsers.length, ...updatedUsers);
+
     setIsAlertSuccess(true);
     setAlertMessage("User Deleted Successfully!");
     toggleAlertPopup();
@@ -131,29 +138,24 @@ function AdminDashboard() {
     }
     if (!currentUser) return;
 
-    // Simulate update in dummy data
-    setUsers(
-      users.map((user) =>
-        user.user_id === currentUser.user_id
-          ? {
-              ...user,
-              user_name: editedUserName,
-              user_email: editedUserEmail,
-            }
-          : user
-      )
+    // Update the users in state
+    const updatedUsers = users.map((user) =>
+      user.user_id === currentUser.user_id
+        ? {
+            ...user,
+            user_name: editedUserName,
+            user_email: editedUserEmail,
+          }
+        : user
     );
-    setFilteredUsers(
-      filteredUsers.map((user) =>
-        user.user_id === currentUser.user_id
-          ? {
-              ...user,
-              user_name: editedUserName,
-              user_email: editedUserEmail,
-            }
-          : user
-      )
-    );
+
+    // Update the state with the new user list
+    setUsers(updatedUsers);
+    setFilteredUsers(updatedUsers);
+
+    // Update the dummyUsers array directly
+    dummyUsers.splice(0, dummyUsers.length, ...updatedUsers);
+
     setIsAlertSuccess(true);
     setAlertMessage("User Updated Successfully");
     toggleAlertPopup();
@@ -162,27 +164,22 @@ function AdminDashboard() {
   };
 
   const handleToggleBlock = (userId: number, isBlocked: boolean) => {
-    // Simulate block/unblock in dummy data
-    setUsers(
-      users.map((user) =>
-        user.user_id === userId
-          ? {
-              ...user,
-              is_user_blocked: !isBlocked,
-            }
-          : user
-      )
+    // Update the users in state
+    const updatedUsers = users.map((user) =>
+      user.user_id === userId
+        ? {
+            ...user,
+            is_user_blocked: !isBlocked,
+          }
+        : user
     );
-    setFilteredUsers(
-      filteredUsers.map((user) =>
-        user.user_id === userId
-          ? {
-              ...user,
-              is_user_blocked: !isBlocked,
-            }
-          : user
-      )
-    );
+
+    // Update the state with the new user list
+    setUsers(updatedUsers);
+    setFilteredUsers(updatedUsers);
+
+    // Update the dummyUsers array directly
+    dummyUsers.splice(0, dummyUsers.length, ...updatedUsers);
 
     // Display an alert depending on the new block status
     if (!isBlocked) {
