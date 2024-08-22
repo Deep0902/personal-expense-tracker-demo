@@ -1,4 +1,3 @@
-import axios from "axios"; // Import axios for API calls
 import { useEffect, useState } from "react";
 import { Expense } from "../../../interfaces/Expense";
 import "./TransactionHistory.css";
@@ -8,6 +7,8 @@ import { downloadCSV } from "../../utils/csvUtils";
 import csvExport from "/images/csv-export.svg";
 import PopupWarning from "../../PopupWarning/PopupWarning";
 import PopupConfirmation from "../../PopupConfirmation/PopupConfirmation";
+// Import the dummy data
+import { dummyUsers, dummyExpenses } from "../../dummyDatas";
 
 interface HistoryDetailsProps {
   userExpenses: Expense[];
@@ -24,12 +25,18 @@ function TransactionHistory({
   userData,
   initialSearchQuery = "", // New prop with default empty string
 }: HistoryDetailsProps) {
-  //State to manage filter overlay
+  // State to manage filter overlay
   const [dateFilter, setDateFilter] = useState(false);
 
   // State management
   const [fromDate, setFromDate] = useState<string | null>(null);
   const [toDate, setToDate] = useState<string | null>(null);
+  const [expenses, setExpenses] = useState<Expense[]>(userExpenses);
+  const [visibleDropdownIndex, setVisibleDropdownIndex] = useState<
+    number | null
+  >(null);
+
+  // Filter expenses by date
   function toggleDateFilter(applyFilter = false) {
     if (applyFilter && fromDate && toDate) {
       const filteredExpenses = userExpenses.filter((expense) => {
@@ -47,17 +54,8 @@ function TransactionHistory({
     setDateFilter(!dateFilter);
   }
 
-  // State to manage expenses
-  const [expenses, setExpenses] = useState<Expense[]>(userExpenses);
-
-  // State for managing which dropdown is visible
-  const [visibleDropdownIndex, setVisibleDropdownIndex] = useState<
-    number | null
-  >(null);
-
   // Delete Expense Function
-  const token = "my_secure_token"; // Token for authorization
-  const deleteExpense = async (transaction_no: string) => {
+  const deleteExpense = (transaction_no: string) => {
     try {
       const transaction = expenses.find(
         (expense) => expense.transaction_no === transaction_no
@@ -75,48 +73,26 @@ function TransactionHistory({
           ? userData.wallet + transaction.amount
           : userData.wallet - transaction.amount;
 
-      const deleteTransactionPromise = axios.delete(
-        `http://127.0.0.1:5000/api/expenses/${userExpenses[0].user_id}/${transaction_no}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      // Remove the transaction from dummyExpenses
+      const updatedExpenses = dummyExpenses.filter(
+        (expense) => expense.transaction_no !== transaction_no
       );
+      // Update dummyExpenses array
+      dummyExpenses.splice(0, dummyExpenses.length, ...updatedExpenses);
 
-      const updateUserPromise = axios.put(
-        `http://127.0.0.1:5000/api/users/${userExpenses[0].user_id}`,
-        {
-          wallet: updatedWallet,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      // Update the userData wallet
+      const updatedUsers = dummyUsers.map((user) =>
+        user.user_id === userData.user_id
+          ? { ...user, wallet: updatedWallet }
+          : user
       );
+      // Update dummyUsers array
+      dummyUsers.splice(0, dummyUsers.length, ...updatedUsers);
 
-      const [deleteTransactionResponse, updateUserResponse] = await Promise.all(
-        [deleteTransactionPromise, updateUserPromise]
-      );
-
-      if (
-        deleteTransactionResponse.status === 200 &&
-        updateUserResponse.status === 200
-      ) {
-        setExpenses(
-          expenses.filter(
-            (expense) => expense.transaction_no !== transaction_no
-          )
-        );
-        setIsAlertSuccess(true);
-        setAlertMessage("Transaction deleted and wallet updated successfully.");
-        toggleAlertPopup();
-      } else {
-        setIsAlertSuccess(false);
-        setAlertMessage("Failed to delete transaction or update wallet.");
-        toggleAlertPopup();
-      }
+      setExpenses(updatedExpenses);
+      setIsAlertSuccess(true);
+      setAlertMessage("Transaction deleted and wallet updated successfully.");
+      toggleAlertPopup();
     } catch (err) {
       setIsAlertSuccess(false);
       setAlertMessage(
@@ -222,6 +198,7 @@ function TransactionHistory({
     }, {} as Record<string, Expense[]>);
   };
   const groupedTransactions = groupTransactionsByDate(sortedTransactions);
+
   useEffect(() => {
     const filteredExpenses = userExpenses.filter((expense) => {
       const matchesSearchQuery =
@@ -252,7 +229,8 @@ function TransactionHistory({
 
     downloadCSV(data, `${userData.user_name}'s Expenses`);
   };
-  //Logic for Alert
+
+  // Logic for Alert
   const [isAlertSuccess, setIsAlertSuccess] = useState(false);
   const [isPopVisible, setIsPopVisible] = useState(false);
   const toggleAlertPopup = () => {
@@ -260,7 +238,7 @@ function TransactionHistory({
   };
   const [alertMessage, setAlertMessage] = useState("");
 
-  //Logic for confirmation Alert
+  // Logic for confirmation Alert
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [confirmationTransactionNo, setConfirmationTransactionNo] = useState<
     string | null
@@ -270,18 +248,14 @@ function TransactionHistory({
     setShowConfirmationPopup(true);
   };
 
-  const handleConfirmation = async (confirmation: boolean) => {
+  const handleConfirmation = (confirmation: boolean) => {
     if (confirmation && confirmationTransactionNo) {
-      await deleteExpense(confirmationTransactionNo);
+      deleteExpense(confirmationTransactionNo);
     }
     setShowConfirmationPopup(false);
-    setConfirmationTransactionNo(null); // Clear the transaction number after handling confirmation
+    setConfirmationTransactionNo(null);
   };
 
-  useEffect(() => {
-    // Scroll to the top of the page when the component mounts
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [isPopVisible, showConfirmationPopup, dateFilter]);
   return (
     <>
       {isPopVisible && (

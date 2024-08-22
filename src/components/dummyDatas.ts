@@ -43,7 +43,7 @@ export let dummyUsers: Users[] = [
     user_email: "sam.brown@example.com",
     user_pass: "pass789",
     profile_img: 4,
-    wallet: 0,
+    wallet: 10000,
     is_user_blocked: false,
   },
   {
@@ -52,7 +52,7 @@ export let dummyUsers: Users[] = [
     user_email: "zxc@email.com",
     user_pass: "zxc",
     profile_img: 2,
-    wallet: 0,
+    wallet: 10000,
     is_user_blocked: false,
   },
 ];
@@ -77,7 +77,7 @@ export let dummyExpenses: Expense[] = [
     transaction_type: "debit",
   },
   {
-    user_id: 3,
+    user_id: 4,
     transaction_no: "1",
     title: "Salary",
     amount: 2000.0,
