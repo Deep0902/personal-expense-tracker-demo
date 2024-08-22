@@ -1,0 +1,32 @@
+.mainContainer {
+  min-height: unset;
+  width: -webkit-fill-available;
+}
+.pageSectionHorizontal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.pageSectionVertical {
+  display: flex;
+  position: relative;
+}
+
+.content {
+  padding: 0px 1.5em;
+}
+.mobileView {
+  display: none;
+}
+.webView {
+  display: block;
+}
+
+@media (max-width: 760px) {
+  .mobileView {
+    display: block;
+  }
+  .webView {
+    display: none;
+  }
+}

@@ -1,0 +1,325 @@
+.TransactionHistory {
+  position: relative;
+  padding-right: 5%;
+  padding-left: 5%;
+}
+
+.Historytitle {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.Historytitle h3 {
+  margin: 0;
+  color: #003321;
+  font-size: 27px;
+}
+.searchItems {
+  position: relative;
+  align-items: center;
+}
+.searchItems img {
+  background-color: #019863;
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+  right: -2px;
+  top: 0px;
+  height: 22px;
+  width: 24px;
+}
+
+.searchItems input {
+  border: 2px solid #019863;
+  border-radius: 10px;
+  padding: 10px;
+  width: 250px;
+  color: #003321;
+}
+
+.searchItems input:focus {
+  border: 2px solid #019863;
+  outline: 2px solid #019863;
+}
+.searchItems input:focus {
+  border-color: #019863;
+  outline: none;
+  position: relative;
+}
+.buttons-alignment {
+  display: flex;
+  justify-content: space-between;
+}
+.buttons-alignment button:hover {
+  scale: 1.05;
+}
+.TransactionHistory button {
+  color: #f3f7f6;
+  background-color: #019863;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+  font-size: 15px;
+}
+
+.historyList .date {
+  color: #003321;
+  font-size: 20px;
+}
+.categoryEmoji {
+  border-radius: 50%;
+  font-size: 20px;
+  padding: 10px 11px;
+  margin: 8px;
+}
+.green-emoji {
+  background-color: #41d2ac80;
+}
+
+.red-emoji {
+  background-color: #f6d6d3;
+}
+
+.transactionCard {
+  background-color: #eaf9f6;
+  text-align: center;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  padding: 4px;
+}
+.transactionCard:hover {
+  scale: 1.03;
+}
+.categoryInfo {
+  margin-left: 10px;
+  text-align: left;
+  flex: 1;
+}
+
+.categoryInfo span {
+  color: #003321;
+  font-size: 20px;
+}
+
+.categoryInfo label {
+  font-size: 20px;
+}
+.moneyCredit {
+  color: #019863;
+}
+.moneyDebit {
+  color: #e74c3c;
+}
+.moreIcon {
+  height: 35px;
+  width: 35px;
+  margin-right: 4px;
+}
+.moreIcon:hover {
+  background-color: #0033212a;
+  border-radius: 50%;
+}
+/* .moreIconContainer {
+  position: relative; 
+}*/
+.mobileView {
+  display: none;
+}
+.webView {
+  display: block;
+}
+
+.moreIconContainer p {
+  text-align: left;
+  margin: 0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.moreIconContainer p:hover {
+  background-color: #555;
+}
+
+.historyDropdown {
+  position: absolute;
+  background-color: #444444;
+  border-radius: 4px;
+  color: #fff;
+  right: 0;
+  display: none; /* Initially hidden */
+  z-index: 2;
+}
+
+.moreIconContainer:hover .historyDropdown {
+  display: block; /* Show on hover for desktop */
+  cursor: pointer;
+}
+.noExpensesMessage {
+  text-align: center;
+  font-size: 30px;
+  color: #003321;
+}
+
+.overlayBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #00332158;
+  z-index: 3;
+}
+
+.overlayBox {
+  background-color: #e5f7f4;
+  border-radius: 10px;
+  padding: 30px 45px;
+  box-shadow: 0px 0px 10px #0000000a;
+  display: flex;
+  flex-direction: column;
+  margin: 10% 35%;
+}
+
+.overlayBox > span {
+  font-size: 20px;
+}
+
+.overlayBox > label {
+  font-size: 30px;
+}
+.overlayBox input {
+  width: -webkit-fill-available;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #b3b3b3;
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+.overlayBox select {
+  width: -webkit-fill-available;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #b3b3b3;
+  margin-bottom: 15px;
+}
+.overlayBox input:focus {
+  border: 1px solid #019863;
+  outline: 1px solid #019863;
+}
+.overlayBox input:focus {
+  border-color: #019863;
+  outline: none;
+  position: relative;
+}
+
+.add-button {
+  color: #f3f7f6;
+  background-color: #019863;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+  font-size: 15px;
+  width: -webkit-fill-available;
+  margin-bottom: 15px;
+}
+.cancel-button {
+  background-color: #ffffff;
+  color: #003321;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+  font-size: 15px;
+  width: -webkit-fill-available;
+}
+.csvButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px !important;
+}
+.csvButton > img {
+  margin-right: 4px;
+  height: 20px;
+  width: 20px;
+}
+/* Phone Screen CSS */
+@media (max-width: 760px) {
+  .TransactionHistory {
+    padding: 0;
+    position: relative;
+    margin-top: 18px;
+  }
+  .mobileView {
+    display: block;
+  }
+  .webView {
+    display: none;
+  }
+  .Historytitle h3 {
+    font-size: 17px;
+  }
+  .searchItems input {
+    width: 93%;
+    position: sticky;
+  }
+  .searchItems img {
+    height: 23.5px;
+  }
+  .TransactionHistory button {
+    font-size: 12px;
+    color: #f3f7f6;
+    background-color: #019863;
+    border: none;
+    border-radius: 5px;
+  }
+  .historyList {
+    margin-top: 10px;
+  }
+  .historyList .date {
+    font-size: 18px;
+  }
+  .categoryInfo span {
+    font-size: 16px;
+    width: 100%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px; /* Set width as needed */
+  }
+  .categoryInfo label {
+    font-size: 16px;
+  }
+  .mobileViewAddTransaction {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px 10px !important;
+  }
+  .overlayBox {
+    margin: 45% 10%;
+    padding: 20px 25px;
+  }
+  .overlayBox > label {
+    font-size: 23px;
+  }
+  .overlayBox > span {
+    font-size: 17px;
+  }
+}
+@keyframes initialAppear {
+  from {
+    opacity: 0;
+    scale: 0.8;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+    transform: translateY(0px);
+  }
+}
+.historyList > div, .overlayBox {
+  animation: initialAppear 0.5s ease-in-out;
+}
