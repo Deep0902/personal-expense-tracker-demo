@@ -74,7 +74,6 @@ function AdminDashboard() {
       "/personal-expense-tracker-demo/AdminLogin"
     );
   };
-
   // Search input change handler
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase();
