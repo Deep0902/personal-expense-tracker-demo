@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import "./NewTransacrion.css";
 import PopupWarning from "../../PopupWarning/PopupWarning";
 import LoadingComponent from "../../LoadingComponent/LoadingComponent";
+import { dummyExpenses } from "../../dummyDatas";
 
 interface NewTransactionProps {
   userData: any;
@@ -17,7 +17,6 @@ function NewTransaction({ userData, onNewTransaction, defaultTransactionType }: 
   const [amount, setAmount] = useState<string | number>("");
   const [category, setCategory] = useState("");
   const [transactionType, setTransactionType] = useState(defaultTransactionType || "debit");
-  const token = "my_secure_token"; // Token for authorization
 
   function alertDisplay(message: string) {
     setAlertMessage(message);
@@ -26,22 +25,22 @@ function NewTransaction({ userData, onNewTransaction, defaultTransactionType }: 
   }
 
   // Handle form submission
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
+  
     // Perform validations
     let hasError = false;
-
+  
     // Trim the input values
     const trimmedTitle = title.trim();
     const trimmedCategory = category.trim();
-
+  
     if (!trimmedTitle) {
       setIsAlertSuccess(false);
       alertDisplay("Title is required.");
       hasError = true;
     }
-
+  
     const currentDate = new Date();
     const enteredDate = new Date(date);
     if (!date) {
@@ -53,7 +52,7 @@ function NewTransaction({ userData, onNewTransaction, defaultTransactionType }: 
       alertDisplay("Date cannot be in the future.");
       hasError = true;
     }
-
+  
     if (!amount || Number(amount) <= 0) {
       setIsAlertSuccess(false);
       alertDisplay("Amount must be a positive number.");
@@ -68,77 +67,42 @@ function NewTransaction({ userData, onNewTransaction, defaultTransactionType }: 
       );
       hasError = true;
     }
-
+  
     if (!trimmedCategory) {
       setIsAlertSuccess(false);
       alertDisplay("Category is required.");
       hasError = true;
     }
-
+  
     if (hasError) {
       return;
     }
-
-    try {
-      // Call the API to add the new transaction
-      await axios.post(
-        "http://127.0.0.1:5000/api/expenses",
-        {
-          user_id: userData.user_id,
-          title: trimmedTitle,
-          date,
-          amount: Number(amount),
-          category: trimmedCategory,
-          transaction_type: transactionType,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Calculate the new wallet value
-      const newWallet =
-        transactionType === "debit"
-          ? userData.wallet - Number(amount)
-          : userData.wallet + Number(amount);
-
-      // Update the user's wallet
-      const updateUserResponse = await axios.put(
-        `http://127.0.0.1:5000/api/users/${userData.user_id}`,
-        {
-          wallet: newWallet,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Notify user based on the result of the wallet update
-      if (updateUserResponse.status === 200) {
-        setIsAlertSuccess(true);
-        alertDisplay("Transaction added successfully and wallet updated!");
-        toggleLoading();
-        setTimeout(() => {
-          onNewTransaction(); // Refresh the transaction list
-        }, 4000);
-      } else {
-        setIsAlertSuccess(false);
-        alertDisplay("Transaction added, but failed to update wallet.");
-        toggleLoading();
-        setTimeout(() => {}, 5000);
-      }
-    } catch (error) {
-      console.error("Error adding transaction or updating wallet", error);
-      setIsAlertSuccess(false);
-      alertDisplay("An error occurred while processing your transaction.");
-      toggleLoading();
-      setTimeout(() => {}, 5000);
-    }
+  
+    // Add the new transaction to the dummyExpenses array
+    dummyExpenses.push({
+      user_id: userData.user_id,
+      transaction_no: (dummyExpenses.length + 1).toString(),
+      title: trimmedTitle,
+      date,
+      amount: Number(amount),
+      category: trimmedCategory,
+      transaction_type: transactionType,
+    });
+  
+    // Update the user's wallet
+    userData.wallet =
+      transactionType === "debit"
+        ? userData.wallet - Number(amount)
+        : userData.wallet + Number(amount);
+  
+    setIsAlertSuccess(true);
+    alertDisplay("Transaction added successfully and wallet updated!");
+    toggleLoading();
+    setTimeout(() => {
+      onNewTransaction(); // Refresh the transaction list
+    }, 2000);
   };
+  
   //Logic for Alert
   const [isAlertSuccess, setIsAlertSuccess] = useState(false);
   const [isPopVisible, setIsPopVisible] = useState(false);

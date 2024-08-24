@@ -7,11 +7,11 @@ import avatar5 from "/images/avatars/avatar-girl-2.svg";
 import avatar6 from "/images/avatars/avatar-girl-3.svg";
 import editProfileImg from "/images/avatars/edit-profile-img.svg";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PopupWarning from "../../PopupWarning/PopupWarning";
 import PopupConfirmation from "../../PopupConfirmation/PopupConfirmation";
 import LoadingComponent from "../../LoadingComponent/LoadingComponent";
+import { dummyUsers } from "../../dummyDatas";
 
 interface UserProfileProps {
   userData: any;
@@ -31,7 +31,6 @@ function UserProfile({ userData, toggleParentUseEffect }: UserProfileProps) {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const token = "my_secure_token"; // Add token for authorization
 
   const [updatePasswordFields, setpasswordChange] = useState(false);
   const [chooseProfileOverlay, setChooseProfileOverlay] = useState(false);
@@ -72,6 +71,7 @@ function UserProfile({ userData, toggleParentUseEffect }: UserProfileProps) {
     setConfirmPassword(e.target.value);
   };
 
+  // Function to update user profile details
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -81,7 +81,7 @@ function UserProfile({ userData, toggleParentUseEffect }: UserProfileProps) {
     };
 
     if (updatePasswordFields) {
-      // If password fields are not empty, validate and update
+      // Validate and update password fields
       if (oldPassword !== "" || newPassword !== "" || confirmPassword !== "") {
         if (oldPassword !== userData.user_pass) {
           setIsAlertSuccess(false);
@@ -97,69 +97,53 @@ function UserProfile({ userData, toggleParentUseEffect }: UserProfileProps) {
         }
         if (newPassword === "" || confirmPassword === "") {
           setIsAlertSuccess(false);
-          setAlertMessage("New password passwords cannot be empty.");
+          setAlertMessage("New password cannot be empty.");
           toggleAlertPopup();
           return;
         }
 
-        // Include the new password in the update data if all validations pass
         updatedData.user_pass = newPassword;
       }
     }
 
-    try {
-      const response = await axios.put(
-        `http://127.0.0.1:5000/api/users/${userData.user_id}`,
-        updatedData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    // Update the user data in dummyUsers
+    const userIndex = dummyUsers.findIndex(
+      (user) => user.user_id === userData.user_id
+    );
+    if (userIndex !== -1) {
+      dummyUsers[userIndex] = { ...dummyUsers[userIndex], ...updatedData };
+      setIsAlertSuccess(true);
+      setAlertMessage("Profile updated successfully!");
+      toggleAlertPopup();
 
-      if (response.status === 200) {
-        sessionStorage.setItem("user_email", email);
-        localStorage.setItem("user_email", email);
-        setIsAlertSuccess(true);
-        setAlertMessage("Profile updated successfully!");
-        toggleAlertPopup();
+      sessionStorage.setItem("user_email", email);
+      localStorage.setItem("user_email", email);
 
-        // Update the userData and session/local storage if the password was changed
-        if (updatePasswordFields && newPassword) {
-          sessionStorage.setItem("user_pass", newPassword);
-          localStorage.setItem("user_pass", newPassword);
-          userData.user_pass = newPassword;
-        }
-
-        userData.user_name = updatedData.user_name;
-        userData.user_email = updatedData.user_email;
-
-        toggleUpdatePasswordFields();
-        toggleParentUseEffect(); // If necessary to trigger a re-render in parent
-      } else {
-        setIsAlertSuccess(false);
-        setAlertMessage("Failed to update profile.");
-        toggleAlertPopup();
+      if (newPassword) {
+        sessionStorage.setItem("user_pass", newPassword);
+        localStorage.setItem("user_pass", newPassword);
+        userData.user_pass = newPassword;
       }
-    } catch (err) {
-      console.error("Error updating profile:", err);
+
+      userData.user_name = updatedData.user_name;
+      userData.user_email = updatedData.user_email;
+
+      toggleUpdatePasswordFields();
+      toggleParentUseEffect(); // Trigger a re-render in the parent
+    } else {
       setIsAlertSuccess(false);
-      setAlertMessage("An error occurred while updating the profile.");
+      setAlertMessage("Failed to update profile.");
       toggleAlertPopup();
     }
   };
 
+  // Function to delete user
   const deleteUser = async () => {
-    try {
-      const response = await axios.delete(
-        `http://127.0.0.1:5000/api/users/${userData.user_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    const userIndex = dummyUsers.findIndex(
+      (user) => user.user_id === userData.user_id
+    );
+    if (userIndex !== -1) {
+      dummyUsers.splice(userIndex, 1); // Remove the user from the dummy data
       setIsAlertSuccess(true);
       setAlertMessage("User deleted successfully");
       toggleAlertPopup();
@@ -167,11 +151,38 @@ function UserProfile({ userData, toggleParentUseEffect }: UserProfileProps) {
       setTimeout(() => {
         navigate("/personal-expense-tracker-demo/SignIn");
       }, 5000);
-      console.log(response.data.message);
-    } catch (error) {
-      console.error("Error deleting user:", error);
+    } else {
       setIsAlertSuccess(false);
-      setAlertMessage("An error occurred while trying to delete the user.");
+      setAlertMessage("Failed to delete user.");
+      toggleAlertPopup();
+    }
+  };
+
+  // Function to update profile image
+  const handleProfileImageUpdate = async () => {
+    if (imageIndex !== null) {
+      const updatedData = {
+        profile_img: imageIndex + 1, // Adjusting for 0-based index
+      };
+
+      const userIndex = dummyUsers.findIndex(
+        (user) => user.user_id === userData.user_id
+      );
+      if (userIndex !== -1) {
+        dummyUsers[userIndex].profile_img = updatedData.profile_img;
+        userData.profile_img = updatedData.profile_img;
+
+        toggleParentUseEffect();
+        toggleChooseProfileOverlay();
+        console.log("Profile image updated successfully!");
+      } else {
+        setIsAlertSuccess(false);
+        setAlertMessage("Failed to update profile image.");
+        toggleAlertPopup();
+      }
+    } else {
+      setIsAlertSuccess(false);
+      setAlertMessage("Please select an image before confirming.");
       toggleAlertPopup();
     }
   };
@@ -184,46 +195,6 @@ function UserProfile({ userData, toggleParentUseEffect }: UserProfileProps) {
   const handleImageClick = (image: any, index: number) => {
     setImageIndex(index);
     setSelectedImage(image);
-  };
-
-  const handleProfileImageUpdate = async () => {
-    if (imageIndex !== null) {
-      const updatedData = {
-        profile_img: imageIndex + 1, // Adjusting for 0-based index
-      };
-
-      try {
-        const response = await axios.put(
-          `http://127.0.0.1:5000/api/users/${userData.user_id}`,
-          updatedData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          console.log("Profile image updated successfully!");
-          toggleParentUseEffect();
-          // Update the user's profile image locally
-          userData.profile_img = updatedData.profile_img;
-          toggleChooseProfileOverlay();
-        } else {
-          setIsAlertSuccess(false);
-          setAlertMessage("Failed to update profile image.");
-          toggleAlertPopup();
-        }
-      } catch (err) {
-        console.error("Error updating profile image:", err);
-        setIsAlertSuccess(false);
-        setAlertMessage("An error occurred while updating the profile image.");
-        toggleAlertPopup();
-      }
-    } else {
-      setIsAlertSuccess(false);
-      setAlertMessage("Please select an image before confirming.");
-      toggleAlertPopup();
-    }
   };
 
   // State for managing password visibility

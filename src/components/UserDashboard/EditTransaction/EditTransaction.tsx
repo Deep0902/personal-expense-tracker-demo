@@ -1,9 +1,9 @@
 import { useState } from "react";
-import axios from "axios";
 import { Expense } from "../../../interfaces/Expense";
 import "../NewTransacrion/NewTransacrion.css";
 import PopupWarning from "../../PopupWarning/PopupWarning";
 import LoadingComponent from "../../LoadingComponent/LoadingComponent";
+import { dummyExpenses, dummyUsers } from "../../dummyDatas";
 
 interface EditTransactionProps {
   onEditTransaction: () => void;
@@ -21,7 +21,6 @@ function EditTransaction({
     ...transaction, // Initialize with the transaction data passed as a prop
   });
 
-  const token = "my_secure_token"; // Replace with actual token if available
 
   // Handler for input changes
   const handleInputChange = (
@@ -86,98 +85,85 @@ function EditTransaction({
     }
 
     try {
-      // Determine wallet adjustment based on the change in transaction type or amount
-      let walletAdjustment = 0;
-      if (
-        formState.transaction_type === "debit" &&
-        transaction.transaction_type === "debit"
-      ) {
-        walletAdjustment =
-          Number(transaction.amount) - Number(formState.amount);
-      } else if (
-        formState.transaction_type === "credit" &&
-        transaction.transaction_type === "credit"
-      ) {
-        walletAdjustment =
-          Number(formState.amount) - Number(transaction.amount);
-      } else if (
-        formState.transaction_type === "debit" &&
-        transaction.transaction_type === "credit"
-      ) {
-        walletAdjustment = -(
-          Number(formState.amount) + Number(transaction.amount)
+        // Determine wallet adjustment based on the change in transaction type or amount
+        let walletAdjustment = 0;
+        if (
+          formState.transaction_type === "debit" &&
+          transaction.transaction_type === "debit"
+        ) {
+          walletAdjustment =
+            Number(transaction.amount) - Number(formState.amount);
+        } else if (
+          formState.transaction_type === "credit" &&
+          transaction.transaction_type === "credit"
+        ) {
+          walletAdjustment =
+            Number(formState.amount) - Number(transaction.amount);
+        } else if (
+          formState.transaction_type === "debit" &&
+          transaction.transaction_type === "credit"
+        ) {
+          walletAdjustment = -(
+            Number(formState.amount) + Number(transaction.amount)
+          );
+        } else if (
+          formState.transaction_type === "credit" &&
+          transaction.transaction_type === "debit"
+        ) {
+          walletAdjustment =
+            Number(formState.amount) + Number(transaction.amount);
+        }
+
+        const newWallet = userData.wallet + walletAdjustment;
+        // Check if the new wallet balance will be negative
+        if (newWallet < 0) {
+          setIsAlertSuccess(false);
+          alertDisplay("Amount is exceeding the wallet");
+          return;
+        }
+
+        // Update the dummy data with the edited transaction
+        const index = dummyExpenses.findIndex(
+          (exp) =>
+            exp.user_id === userData.user_id &&
+            exp.transaction_no === transaction.transaction_no
         );
-      } else if (
-        formState.transaction_type === "credit" &&
-        transaction.transaction_type === "debit"
-      ) {
-        walletAdjustment =
-          Number(formState.amount) + Number(transaction.amount);
-      }
-
-      const newWallet = userData.wallet + walletAdjustment;
-      // Check if the new wallet balance will be negative
-      if (newWallet < 0) {
-        setIsAlertSuccess(false);
-        alertDisplay("Amount is exceeding the wallet");
-        return;
-      }
-      // Call the API to update the transaction
-      await axios.put(
-        `http://127.0.0.1:5000/api/expenses/${userData.user_id}/${transaction.transaction_no}`,
-        {
-          title: trimmedTitle,
-          date: formState.date,
-          amount: Number(formState.amount),
-          category: trimmedCategory,
-          transaction_type: formState.transaction_type,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        if (index !== -1) {
+          dummyExpenses[index] = {
+            ...dummyExpenses[index],
+            title: trimmedTitle,
+            date: formState.date,
+            amount: Number(formState.amount),
+            category: trimmedCategory,
+            transaction_type: formState.transaction_type,
+          };
         }
-      );
 
-      // Update the user's wallet
-      const updateUserResponse = await axios.put(
-        `http://127.0.0.1:5000/api/users/${userData.user_id}`,
-        {
-          wallet: newWallet,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        // Update the user's wallet in dummy data
+        const userIndex = dummyUsers.findIndex(
+          (user) => user.user_id === userData.user_id
+        );
+        if (userIndex !== -1) {
+          dummyUsers[userIndex].wallet = newWallet;
         }
-      );
 
-      // Notify user based on the result of the wallet update
-      if (updateUserResponse.status === 200) {
         setIsAlertSuccess(true);
-        alertDisplay("Transaction added successfully and wallet updated!");
+        alertDisplay("Transaction updated successfully and wallet updated!");
         toggleLoading();
         setTimeout(() => {
           onEditTransaction(); // Close the edit form after submission
         }, 4000);
-      } else {
-        setIsAlertSuccess(false);
-        alertDisplay("Transaction updated, but failed to update wallet.");
-        toggleLoading();
-        setTimeout(() => {
-          onEditTransaction(); // Close the edit form after submission
-        }, 4000);
-      }
     } catch (error) {
-      console.error("Error updating transaction or wallet", error);
-      setIsAlertSuccess(false);
-      alertDisplay("An error occurred while processing your transaction.");
-      toggleLoading();
-      setTimeout(() => {
-        onEditTransaction(); // Close the edit form after submission
-      }, 4000);
+        console.error("Error updating transaction or wallet", error);
+        setIsAlertSuccess(false);
+        alertDisplay("An error occurred while processing your transaction.");
+        toggleLoading();
+        setTimeout(() => {
+            onEditTransaction(); // Close the edit form after submission
+        }, 4000);
     }
-  };
+};
+
 
   //Logic for Alert
   const [isAlertSuccess, setIsAlertSuccess] = useState(false);

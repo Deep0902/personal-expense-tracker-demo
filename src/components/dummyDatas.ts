@@ -64,7 +64,7 @@ export let dummyExpenses: Expense[] = [
     title: "Groceries",
     amount: 50.25,
     category: "Food",
-    date: "2023-01-15",
+    date: "2024-08-15",
     transaction_type: "debit",
   },
   {
@@ -73,7 +73,7 @@ export let dummyExpenses: Expense[] = [
     title: "Electric Bill",
     amount: 75.0,
     category: "Utilities",
-    date: "2023-01-20",
+    date: "2024-08-20",
     transaction_type: "debit",
   },
   {
@@ -82,7 +82,7 @@ export let dummyExpenses: Expense[] = [
     title: "Salary",
     amount: 2000.0,
     category: "Income",
-    date: "2023-01-25",
-    transaction_type: "credit",
+    date: "2024-07-25",
+    transaction_type: "debit",
   },
 ];

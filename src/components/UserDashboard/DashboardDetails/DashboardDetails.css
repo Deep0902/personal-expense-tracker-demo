@@ -241,6 +241,7 @@
     max-width: 240px;
   }
   .displayUsername {
+    margin-top: 8px;
     display: block;
     color: #003321;
     font-size: 30px;

@@ -15,7 +15,7 @@ function HomePage() {
   return (
     <>
       <div className="background-image">
-        <h1>Homepage</h1>
+        <h1>Welcome!</h1>
         <div className="button-center">
           <button
             className="button-highlight poppins-medium"
@@ -23,7 +23,7 @@ function HomePage() {
               navigate("/personal-expense-tracker-demo/LandingPage");
             }}
           >
-            Landing Page
+            Load the Project
           </button>
         </div>
         <br />

@@ -8,13 +8,26 @@ import TopNavbarSignedOut from "../TopNavbarSignedOut/TopNavbarSignedOut";
 import Footer from "../Footer/Footer";
 import ScrollTop from "../ScrollTop/ScrollTop";
 import { useEffect } from "react";
+import { dummyExpenses } from "../dummyDatas";
 
 function LandingPage() {
   const navigate = useNavigate();
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Update dummyExpenses dates to the current month and year
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+
+    dummyExpenses.forEach((expense) => {
+      const updatedDate = new Date(expense.date);
+      updatedDate.setMonth(currentMonth);
+      updatedDate.setFullYear(currentYear);
+      expense.date = updatedDate.toISOString().split("T")[0]; // Updating the date string
+    });
   }, []);
+
   return (
     <>
       <TopNavbarSignedOut />
@@ -25,7 +38,7 @@ function LandingPage() {
         <br />
 
         <div className="container">
-          <ScrollTop/>
+          <ScrollTop />
           <div className="item item-1 poppins-semibold">
             <span>
               Smart{" "}

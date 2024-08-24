@@ -57,6 +57,7 @@
   justify-self: end;
 }
 .accountDetails input {
+  text-align: left;
   margin: 0;
   font-family: poppins;
   padding: 8px;
