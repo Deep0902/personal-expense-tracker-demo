@@ -91,7 +91,7 @@ function AdminLogin() {
                 name="admin_id"
                 value={credentials.admin_id}
                 onChange={handleChange}
-                placeholder="Admin ID"
+                placeholder="Admin ID (admin1)"
                 required
               />
             </div>
@@ -102,7 +102,7 @@ function AdminLogin() {
                 className="form-control poppins-regular"
                 name="admin_pass"
                 value={credentials.admin_pass}
-                placeholder="Password"
+                placeholder="Password (password1)"
                 required
               />
               <span className="toggle-button" onClick={handlePasswordView}>
