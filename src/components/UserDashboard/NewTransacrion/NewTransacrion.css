@@ -117,6 +117,23 @@
     padding: 5px 20px;
     font-size: 13px;
   }
+  .popupBox input[type="date"] {
+    text-align: left;
+    width: -webkit-fill-available;
+    height: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  select::-ms-expand {
+    display: none; /* Hide default dropdown arrow in IE10+ */
+  }
 }
 @keyframes initialAppear {
   from {

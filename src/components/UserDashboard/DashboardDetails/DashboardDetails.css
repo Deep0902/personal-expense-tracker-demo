@@ -253,7 +253,7 @@
     width: -webkit-fill-available;
   }
   .transactionActions span {
-    font-size: 14px;
+    font-size: 15px;
   }
   .transactionActions img {
     height: 30px;
@@ -261,7 +261,7 @@
     margin-bottom: 1vh;
   }
   .transactionActions > div {
-    padding: 3px 0px;
+    padding: 16px 0px;
   }
   .customLeftBorder::before {
     width: 1.5px; /* Border width */
@@ -315,6 +315,9 @@
   }
   .editIcon {
     scale: 0.7;
+  }
+  .pieChartContainerEmpty{
+    padding: 4px;
   }
 }
 

@@ -13,7 +13,7 @@ interface NewTransactionProps {
 function NewTransaction({ userData, onNewTransaction, defaultTransactionType }: NewTransactionProps) {
   // State for form inputs
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().substr(0, 10));
   const [amount, setAmount] = useState<string | number>("");
   const [category, setCategory] = useState("");
   const [transactionType, setTransactionType] = useState(defaultTransactionType || "debit");
@@ -187,7 +187,7 @@ function NewTransaction({ userData, onNewTransaction, defaultTransactionType }: 
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group ">
                   <input
                     type="date"
                     value={date}
