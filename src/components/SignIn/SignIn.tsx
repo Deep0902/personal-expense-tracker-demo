@@ -174,7 +174,7 @@ function SignIn() {
               <input
                 className="poppins-regular"
                 type="email"
-                placeholder="Email"
+                placeholder="Email (tom@email.com)"
                 name="user_email"
                 onChange={handleChangeSignIn}
                 value={credentials.user_email}
@@ -187,7 +187,7 @@ function SignIn() {
                 name="user_pass"
                 onChange={handleChangeSignIn}
                 className="poppins-regular"
-                placeholder="Password"
+                placeholder="Password (tomiscool)"
               />
               <span className="toggle-button" onClick={handlePasswordView}>
                 👁️
