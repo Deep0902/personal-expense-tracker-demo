@@ -307,6 +307,14 @@
   .overlayBox > span {
     font-size: 17px;
   }
+  .customFilter input {
+    width: -webkit-fill-available;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 17px;
+    color: #003321;
+  }
 }
 @keyframes initialAppear {
   from {
@@ -320,6 +328,7 @@
     transform: translateY(0px);
   }
 }
-.historyList > div, .overlayBox {
+.historyList > div,
+.overlayBox {
   animation: initialAppear 0.5s ease-in-out;
 }

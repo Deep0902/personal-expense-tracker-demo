@@ -124,8 +124,10 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    color: #003321;
   }
   select {
+    color: #003321;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;

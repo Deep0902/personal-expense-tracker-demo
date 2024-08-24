@@ -67,7 +67,7 @@ function DashboardDetails({
     Cosmetics: "💄",
     Furniture: "🛋️",
     Life: "🥳",
-    Bills: "🗒️"
+    Bills: "🗒️",
   };
 
   // Helper function to convert string to sentence case
@@ -293,9 +293,9 @@ function DashboardDetails({
   return (
     <>
       {chooseMonthExpenses && (
-        <div className="overlayBackground">
+        <div className="overlayBackground ">
           <div className="poppins-bold">
-            <div className="overlayBox">
+            <div className="overlayBox monthYear">
               <label className="">Choose Month and year</label>
               <br />
               <span className="poppins-regular">

@@ -49,6 +49,7 @@
 .checkboxInput {
   display: flex;
   margin-bottom: 12px;
+  align-items: center;
 }
 .checkboxInput label {
   font-size: 15px;

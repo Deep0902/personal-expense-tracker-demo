@@ -274,7 +274,7 @@ function TransactionHistory({
       {dateFilter && (
         <div className="overlayBackground">
           <div className="poppins-bold">
-            <div className="overlayBox">
+            <div className="overlayBox customFilter">
               <label className="">Custom Date Filter</label>
               <br />
               <span className="poppins-regular">From Date</span>

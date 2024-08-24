@@ -317,8 +317,16 @@
   .editIcon {
     scale: 0.7;
   }
-  .pieChartContainerEmpty{
+  .pieChartContainerEmpty {
     padding: 4px;
+  }
+  .monthYear input {
+    color: #003321;
+    height: 17px;
+    width: -webkit-fill-available;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 }
 
