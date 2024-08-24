@@ -1,0 +1,59 @@
+.HomepageText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0% 10%;
+  height: 100vh; /* Ensure the container takes up the full height of the viewport */
+  margin: 0; /* Remove any default margin */
+}
+.HomepageText p,
+.HomepageText span,
+.HomepageText .button-center {
+  margin: 0 auto; /* Ensure each child element is centered within its container */
+}
+.HomepageText > p {
+  margin: 0;
+  text-align: center;
+  font-size: 45px;
+  color: #003321;
+}
+.HomepageText > span {
+  font-size: 18px;
+  text-align: justify;
+  color: #003321;
+}
+.button-center button {
+  font-size: 20px;
+}
+/* Phone Screen CSS */
+@media (max-width: 760px) {
+  .HomepageText {
+    padding: 0% 7%;
+  }
+  .HomepageText > p {
+    text-align: center;
+    font-size: 35px;
+    color: #003321;
+  }
+  .HomepageText > span {
+    font-size: 15px;
+    text-align: justify;
+  }
+}
+@keyframes initialAppear {
+  from {
+    opacity: 0;
+    scale: 0.7;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+    transform: translateY(0px);
+  }
+}
+.background-image div {
+  animation: initialAppear 0.5s ease-in-out;
+}

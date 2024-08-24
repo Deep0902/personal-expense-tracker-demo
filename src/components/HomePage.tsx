@@ -1,21 +1,37 @@
-import React from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
+import "./HomePage.css";
 
 function HomePage() {
   const navigate = useNavigate();
-  const [goToUserLogin, setGoToUserLogin] = React.useState(false);
-  if (goToUserLogin) {
-    return <Navigate to="/UserLogin" />;
-  }
+  // if (goToUserLogin) {
+  //   return <Navigate to="/UserLogin" />;
+  // }
   // useEffect(() => {
   //   navigate("/LandingPage")
   // }, []);
 
   return (
     <>
-      <div className="background-image">
-        <h1>Welcome!</h1>
+      <div className="HomepageText">
+        <br />
+        <p className="poppins-bold">
+          Welcome to the demo version of my project! 🎉 <br />
+          <br />
+        </p>
+
+        <span className="poppins-regular">
+          Note that while you're exploring, no actual data is being captured,
+          and all real time API calls are disabled on GitHub. Feel free to test
+          and play around as much as you like. Just remember, the data will
+          reset if you refresh the page. <br />
+          <br />
+          Enjoy your experience, and get a feel for how the final project will
+          work! 🚀
+        </span>
+
+        <br />
+        <br />
         <div className="button-center">
           <button
             className="button-highlight poppins-medium"
@@ -23,12 +39,10 @@ function HomePage() {
               navigate("/personal-expense-tracker-demo/LandingPage");
             }}
           >
-            Load the Project
+            Click to Proceed
           </button>
         </div>
-        <br />
-        <br />
-        <button
+        {/* <button
           onClick={() => {
             setGoToUserLogin(true);
           }}
@@ -57,8 +71,7 @@ function HomePage() {
           }}
         >
           Device Dimentions
-        </button>
-
+        </button> */}
         <br />
       </div>
     </>
