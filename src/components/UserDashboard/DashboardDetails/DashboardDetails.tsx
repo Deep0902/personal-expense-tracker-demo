@@ -289,7 +289,10 @@ function DashboardDetails({
     setSelectedYear(new Date().getFullYear());
     setChooseMonthExpenses(!chooseMonthExpenses);
   };
-
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
   return (
     <>
       {chooseMonthExpenses && (

@@ -208,6 +208,10 @@ function TransactionHistory({
   }, [selectedCategory]);
 
   useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  useEffect(() => {
     console.log("Filtering with:", {
       searchQuery,
       fromDate,
