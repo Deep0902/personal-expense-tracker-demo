@@ -16,12 +16,14 @@ interface HistoryDetailsProps {
   onEditTransaction: (transaction: Expense) => void;
   userData: any;
   initialSearchQuery: string;
+  selectedCategory: string | null; // Add this prop
 }
 
 function TransactionHistory({
   userExpenses,
   onNewTransaction,
   onEditTransaction,
+  selectedCategory,
   userData,
   initialSearchQuery = "", // New prop with default empty string
 }: HistoryDetailsProps) {
@@ -200,6 +202,18 @@ function TransactionHistory({
   const groupedTransactions = groupTransactionsByDate(sortedTransactions);
 
   useEffect(() => {
+    if (selectedCategory) {
+      setSearchQuery(selectedCategory.toLowerCase());
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    console.log("Filtering with:", {
+      searchQuery,
+      fromDate,
+      toDate,
+      userExpenses,
+    });
     const filteredExpenses = userExpenses.filter((expense) => {
       const matchesSearchQuery =
         expense.title.toLowerCase().includes(searchQuery) ||
@@ -214,6 +228,7 @@ function TransactionHistory({
 
       return matchesSearchQuery;
     });
+    console.log("Filtered Expenses:", filteredExpenses);
     setExpenses(filteredExpenses);
   }, [searchQuery, fromDate, toDate, userExpenses]);
 
