@@ -48,7 +48,7 @@ function About() {
           <br />
           Click&nbsp;
           <a
-            href="https://github.com/Deep0902/personal-expense-tracker-demo"
+            href="https://github.com/Deep0902/personal-expense-tracker"
             target="_blank"
             rel="noopener noreferrer"
             className="hyperlink"
