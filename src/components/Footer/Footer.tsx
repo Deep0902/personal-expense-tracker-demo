@@ -19,6 +19,15 @@ function Footer() {
               <ul>
                 <li>
                   <a
+                    href="https://deep0902.github.io/Resume/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    About me
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="https://github.com/Deep0902"
                     target="_blank"
                     rel="noopener noreferrer"

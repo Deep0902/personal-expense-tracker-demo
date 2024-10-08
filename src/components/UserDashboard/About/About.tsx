@@ -53,9 +53,20 @@ function About() {
             rel="noopener noreferrer"
             className="hyperlink"
           >
-            here
-          </a>{" "}
+            here&nbsp;
+          </a>
           to check out the project code on GitHub
+          <br />
+          <br />
+          Check out my&nbsp;
+          <a
+            href="https://deep0902.github.io/Resume/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hyperlink"
+          >
+            profile
+          </a>
         </p>
         <br />
         <br />
