@@ -58,18 +58,7 @@ function About() {
           to check out the project code on GitHub
           <br />
           <br />
-          Check out my&nbsp;
-          <a
-            href="https://deep0902.github.io/Resume/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hyperlink"
-          >
-            profile
-          </a>
         </p>
-        <br />
-        <br />
         <div className="bottomText">
           <p>Your data stays with you. We don't collect, so you don't fret.</p>
         </div>
