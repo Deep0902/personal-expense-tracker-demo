@@ -309,6 +309,7 @@
     width: 100%;
     padding: 6px;
     margin-bottom: 20px;
+    align-items: center;
   }
   .expandIcon {
     height: 10px;
