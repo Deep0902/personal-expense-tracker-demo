@@ -13,8 +13,19 @@ import SignIn from "./components/SignIn/SignIn";
 import UserDashboard from "./components/UserDashboard/UserDashboard";
 import SignUp from "./components/SignUp/SignUp";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import { useEffect } from "react";
+import Lenis from "lenis";
 
 function App() {
+  useEffect(() => {
+    // npm install lenis
+    const lenis = new Lenis();
+    function raf(time: any) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  }, []);
   return (
     <Router>
       {/* <div>
