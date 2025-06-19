@@ -1,3 +1,6 @@
+* {
+  transition: all 0.4s cubic-bezier(0.68, -0.85, 0.27, 1.85);
+}
 .bar {
   width: 220px;
   background-color: #277761;
@@ -13,7 +16,6 @@
 }
 .username {
   padding: 10px 15px;
-  transition: opacity 0.5s ease;
   display: flex;
   flex-direction: column;
 }
@@ -39,6 +41,9 @@
 .rotate180 {
   transform: rotate(180deg);
   scale: 0.8;
+}
+.hide-image{
+  opacity: 0;
 }
 .pagesToggle {
   display: flex;
@@ -74,6 +79,13 @@
 .adjustImage {
   padding-left: 2px !important;
   scale: 0.8;
+}
+.selection:hover {
+  background-color: #21c598;
+  cursor: pointer;
+}
+.selection:hover span {
+  color: #fff;
 }
 /* Phone Screen CSS */
 @media (max-width: 760px) {

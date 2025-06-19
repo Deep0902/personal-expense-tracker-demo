@@ -19,14 +19,6 @@ function Sidebar({
 }: SidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true); // State to track if the div is expanded
   const resizableDivRef = useRef<HTMLDivElement>(null);
-  const toggleDivSize = () => {
-    if (resizableDivRef.current) {
-      // Toggle the width based on the current state
-      const newWidth = isExpanded ? "55px" : "220px";
-      resizableDivRef.current.style.width = newWidth;
-      setIsExpanded(!isExpanded); // Toggle the state
-    }
-  };
   useEffect(() => {
     setSelectedOption(activeTab);
   }, [activeTab]);
@@ -41,7 +33,22 @@ function Sidebar({
   };
 
   return (
-    <div ref={resizableDivRef} className="bar">
+    <div
+      ref={resizableDivRef}
+      className="bar"
+      onMouseEnter={() => {
+        if (resizableDivRef.current) {
+          resizableDivRef.current.style.width = "220px";
+        }
+        setIsExpanded(true);
+      }}
+      onMouseLeave={() => {
+        if (resizableDivRef.current) {
+          resizableDivRef.current.style.width = "55px";
+        }
+        setIsExpanded(false);
+      }}
+    >
       <div className={isExpanded ? "toggleContainer" : "justifyCenter"}>
         {isExpanded && (
           <div className="username">
@@ -50,9 +57,8 @@ function Sidebar({
           </div>
         )}
         <img
-          onClick={toggleDivSize}
           src={sidebarToggle}
-          className={isExpanded ? "" : "rotate180"}
+          className={isExpanded ? "hide-image" : "rotate180"}
           alt=""
         />
       </div>
