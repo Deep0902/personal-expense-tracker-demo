@@ -1,9 +1,6 @@
-# React + TypeScript + Vite
+# Personal Expense Tracker Demo 
 
-# Click [here](https://deep0902.github.io/personal-expense-tracker-demo/) to view the app
-
-
-# Personal Expense Tracker Demo
+# React + TypeScript + Vite Click [here](https://deep0902.github.io/personal-expense-tracker-demo/) to view the app!
 
 A modern web application for managing personal finances, built with React, TypeScript, and Vite.
 
